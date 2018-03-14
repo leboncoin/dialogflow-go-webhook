@@ -7,9 +7,9 @@ import (
 	"strings"
 )
 
-// Response is the top-level struct holding all the information
+// Request is the top-level struct holding all the information
 // Basically links a response ID with a query result.
-type Response struct {
+type Request struct {
 	Session                     string          `json:"session,omitempty"`
 	ResponseID                  string          `json:"responseId,omitempty"`
 	QueryResult                 QueryResult     `json:"queryResult,omitempty"`
@@ -18,12 +18,12 @@ type Response struct {
 
 // GetParams simply unmarshals the parameters to the given struct and returns
 // an error if it's not possible
-func (rw *Response) GetParams(i interface{}) error {
+func (rw *Request) GetParams(i interface{}) error {
 	return json.Unmarshal(rw.QueryResult.Parameters, &i)
 }
 
 // GetContext allows to search in the output contexts of the query
-func (rw *Response) GetContext(ctx string, i interface{}) error {
+func (rw *Request) GetContext(ctx string, i interface{}) error {
 	for _, c := range rw.QueryResult.OutputContexts {
 		if strings.HasSuffix(c.Name, ctx) {
 			return json.Unmarshal(c.Parameters, &i)
@@ -34,7 +34,7 @@ func (rw *Response) GetContext(ctx string, i interface{}) error {
 
 // NewContext is a helper function to create a new named context with params
 // name and a lifespan
-func (rw *Response) NewContext(name string, lifespan int, params interface{}) (*Context, error) {
+func (rw *Request) NewContext(name string, lifespan int, params interface{}) (*Context, error) {
 	var err error
 	var b []byte
 
