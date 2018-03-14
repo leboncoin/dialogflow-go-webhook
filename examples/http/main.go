@@ -41,6 +41,15 @@ func webhook(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// Do things with the context you just retrieved
+	dff := &df.Fulfillment{
+		FulfillmentMessages: df.Messages{
+			df.ForGoogle(df.SingleSimpleResponse("hello", "hello")),
+			{RichMessage: df.Text{Text: []string{"hello"}}},
+		},
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(dff)
 }
 
 func main() {

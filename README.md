@@ -14,8 +14,9 @@ Simple library to create compatible DialogFlow v2 webhooks using Go.
 This package is only intended to create webhooks, it doesn't implement the whole 
 DialogFlow API.
 
-<!-- TOC depthFrom:2 -->
+<!-- TOC -->
 
+- [Dialogflow Go Webhook](#dialogflow-go-webhook)
 - [Introduction](#introduction)
     - [Goal of this package](#goal-of-this-package)
     - [Disclaimer](#disclaimer)
@@ -30,9 +31,9 @@ DialogFlow API.
 
 <!-- /TOC -->
 
-## Introduction
+# Introduction
 
-### Goal of this package
+## Goal of this package
 
 This package aims to implement a complete way to receive a DialogFlow payload,
 parse it, and retrieve data stored in the parameters and contexts by providing
@@ -42,34 +43,34 @@ It also allows you to format your response properly, the way DialogFlow expects
 it, including all the message types and platforms. (Such as cards, carousels,
 quick replies, etc…)
 
-### Disclaimer
+## Disclaimer
 
 As DialogFlow's v2 API is still in Beta, there may be breaking changes. If 
 something breaks, please file an issue.
 
-## Installation
+# Installation
 
-### Using dep
+## Using dep
 
 If you're using [dep](https://github.com/golang/dep) which is the recommended
 way to vendor your dependencies in your project, simply run this command :
 
 `dep ensure -add github.com/leboncoin/dialogflow-go-webhook`
 
-### Using go get
+## Using go get
 
 If your project isn't using `dep` yet, you can use `go get` to install this
 package :
 
 `go get github.com/leboncoin/dialogflow-go-webhook`
 
-## Usage
+# Usage
 
 Import the package `github.com/leboncoin/dialogflow-go-webhook` and use it with
 the `dialogflow` package name. To make your code cleaner, import it as `df`.
 All the following examples and usages use the `df` notation.
 
-### Handling incoming request
+## Handling incoming request
 
 In this section we'll use the [gin](https://github.com/gin-gonic/gin) router as
 it has some nice helper functions that will keep the code concise. For an
@@ -115,7 +116,7 @@ func main() {
 }
 ```
 
-### Retrieving params and contexts
+## Retrieving params and contexts
 
 ```go
 type params struct {
@@ -127,17 +128,18 @@ type params struct {
 func HandleWebhook(c *gin.Context) {
 	var err error
 	var dfr *df.Request
-    var p params
+	var p params
 
 	if err = c.BindJSON(&dfr); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
-    }
-    
-    if err = dfr.GetParams(&p); err != nil {
-        c.AbortWithStatus(http.StatusBadRequest)
-        return
-    }
+	}
+
+	// Retrieve the params of the request
+	if err = dfr.GetParams(&p); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 }
 ```
 
@@ -162,26 +164,50 @@ type params struct {
 func HandleWebhook(c *gin.Context) {
 	var err error
 	var dfr *df.Request
-    var p params
+	var p params
 
 	if err = c.BindJSON(&dfr); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
-    }
-    
-    if err = dfr.GetContext("my-amazing-context", &p); err != nil {
-        c.AbortWithStatus(http.StatusBadRequest)
-        return
-    }
-}
-``` 
+	}
 
-### Responding with a fulfillment
+	if err = dfr.GetContext("my-awesome-context", &p); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+}
+```
+
+## Responding with a fulfillment
 
 DialogFlow expects you to respond with what is called a [fulfillment](https://dialogflow.com/docs/reference/api-v2/rest/v2beta1/WebhookResponse).
 
+This package supports every rich response type.
 
-## Examples
+```go
+func HandleWebhook(c *gin.Context) {
+	var err error
+	var dfr *df.Request
+	var p params
+
+	if err = c.BindJSON(&dfr); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	// Send back a fulfillment
+	dff := &df.Fulfillment{
+		FulfillmentMessages: df.Messages{
+			df.ForGoogle(df.SingleSimpleResponse("hello", "hello")),
+			{RichMessage: df.Text{Text: []string{"hello"}}},
+		},
+	}
+	c.JSON(http.StatusOK, dff)
+}
+```
+
+
+# Examples
 
 - [Using Gin](https://github.com/leboncoin/dialogflow-go-webhook/blob/master/examples/gin)
 - [Using http](https://github.com/leboncoin/dialogflow-go-webhook/blob/master/examples/http)
