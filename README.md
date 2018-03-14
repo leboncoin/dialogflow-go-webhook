@@ -3,6 +3,8 @@
 ![Go Version](https://img.shields.io/badge/go-1.9-brightgreen.svg)
 ![Go Version](https://img.shields.io/badge/go-1.10-brightgreen.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/leboncoin/dialogflow-go-webhook)](https://goreportcard.com/report/github.com/leboncoin/dialogflow-go-webhook)
+[![Build Status](https://drone.depado.eu/api/badges/leboncoin/dialogflow-go-webhook/status.svg)](https://drone.depado.eu/leboncoin/dialogflow-go-webhook)
+[![codecov](https://codecov.io/gh/leboncoin/dialogflow-go-webhook/branch/master/graph/badge.svg)](https://codecov.io/gh/leboncoin/dialogflow-go-webhook)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/leboncoin/dialogflow-go-webhook/blob/master/LICENSE)
 [![Godoc](https://godoc.org/github.com/leboncoin/dialogflow-go-webhook?status.svg)](https://godoc.org/github.com/leboncoin/dialogflow-go-webhook)
 
