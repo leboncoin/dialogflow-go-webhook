@@ -1,0 +1,19 @@
+workspace:
+  base: /go
+  path: src/github.com/leboncoin/dialogflow-go-webhook/
+
+pipeline:
+
+  prerequisites:
+    image: golang:1.10
+    commands:
+      - go get ./...
+
+  test:
+    image: golang:1.10
+    commands:
+      - go test -race -coverprofile=coverage.txt -covermode=atomic
+
+  codecov:
+    image: robertstettner/drone-codecov
+    secrets: [ codecov_token ]
