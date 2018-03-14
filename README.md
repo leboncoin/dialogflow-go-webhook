@@ -97,7 +97,7 @@ type params struct {
 	Age    int    `json:"age"`
 }
 
-func HandleWebhook(c *gin.Context) {
+func webhook(c *gin.Context) {
 	var err error
 	var dfr *df.Request
 
@@ -109,7 +109,7 @@ func HandleWebhook(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
-	r.POST("/webhook")
+	r.POST("/webhook", webhook)
 	if err := r.Run("127.0.0.1:8001"); err != nil {
 		panic(err)
 	}
@@ -125,7 +125,7 @@ type params struct {
 	Age    int    `json:"age"`
 }
 
-func HandleWebhook(c *gin.Context) {
+func webhook(c *gin.Context) {
 	var err error
 	var dfr *df.Request
 	var p params
@@ -161,7 +161,7 @@ type params struct {
 	Age    int    `json:"age"`
 }
 
-func HandleWebhook(c *gin.Context) {
+func webhook(c *gin.Context) {
 	var err error
 	var dfr *df.Request
 	var p params
@@ -185,7 +185,7 @@ DialogFlow expects you to respond with what is called a [fulfillment](https://di
 This package supports every rich response type.
 
 ```go
-func HandleWebhook(c *gin.Context) {
+func webhook(c *gin.Context) {
 	var err error
 	var dfr *df.Request
 	var p params

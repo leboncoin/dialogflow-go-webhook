@@ -13,7 +13,7 @@ type params struct {
 	Age    int    `json:"age"`
 }
 
-func HandleWebhook(c *gin.Context) {
+func webhook(c *gin.Context) {
 	var err error
 	var dfr *df.Request
 	var p params
@@ -49,7 +49,7 @@ func HandleWebhook(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
-	r.POST("/webhook")
+	r.POST("/webhook", webhook)
 	if err := r.Run("127.0.0.1:8001"); err != nil {
 		panic(err)
 	}
