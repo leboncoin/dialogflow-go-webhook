@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestResponse_GetParams(t *testing.T) {
+func TestRequest_GetParams(t *testing.T) {
 	type out struct {
 		In  string `json:"in"`
 		Out string `json:"out"`
@@ -26,18 +26,18 @@ func TestResponse_GetParams(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rw := &Response{QueryResult: QueryResult{Parameters: tt.params}}
+			rw := &Request{QueryResult: QueryResult{Parameters: tt.params}}
 
 			var output out
 			if err := rw.GetParams(&output); (err != nil) != tt.expectError {
-				t.Errorf("Response.GetParams() error = %v, wantErr %v", err, tt.expectError)
+				t.Errorf("Request.GetParams() error = %v, wantErr %v", err, tt.expectError)
 			}
 			assert.Equal(t, output, tt.expected, "should match")
 		})
 	}
 }
 
-func TestResponse_GetContext(t *testing.T) {
+func TestRequest_GetContext(t *testing.T) {
 	type out struct {
 		In  string `json:"in"`
 		Out string `json:"out"`
@@ -76,18 +76,18 @@ func TestResponse_GetContext(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rw := &Response{QueryResult: QueryResult{OutputContexts: tt.fields}}
+			rw := &Request{QueryResult: QueryResult{OutputContexts: tt.fields}}
 
 			var output out
 			if err := rw.GetContext(tt.ctx, &output); (err != nil) != tt.wantErr {
-				t.Errorf("Response.GetContext() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Request.GetContext() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			assert.Equal(t, output, tt.expected, "should match")
 		})
 	}
 }
 
-func TestResponse_NewContext(t *testing.T) {
+func TestRequest_NewContext(t *testing.T) {
 	type out struct {
 		In  string `json:"in"`
 		Out string `json:"out"`
@@ -128,7 +128,7 @@ func TestResponse_NewContext(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rw := &Response{
+			rw := &Request{
 				Session:                     tt.fields.Session,
 				ResponseID:                  tt.fields.ResponseID,
 				QueryResult:                 tt.fields.QueryResult,
@@ -136,7 +136,7 @@ func TestResponse_NewContext(t *testing.T) {
 			}
 			got, err := rw.NewContext(tt.args.name, tt.args.lifespan, tt.args.params)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Response.NewContext() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Request.NewContext() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {

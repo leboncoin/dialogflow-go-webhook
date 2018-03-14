@@ -14,6 +14,22 @@ Simple library to create compatible DialogFlow v2 webhooks using Go.
 This package is only intended to create webhooks, it doesn't implement the whole 
 DialogFlow API.
 
+<!-- TOC depthFrom:2 -->
+
+- [Introduction](#introduction)
+    - [Goal of this package](#goal-of-this-package)
+    - [Disclaimer](#disclaimer)
+- [Installation](#installation)
+    - [Using dep](#using-dep)
+    - [Using go get](#using-go-get)
+- [Usage](#usage)
+    - [Handling incoming request](#handling-incoming-request)
+    - [Retrieving params and contexts](#retrieving-params-and-contexts)
+    - [Responding with a fulfillment](#responding-with-a-fulfillment)
+- [Examples](#examples)
+
+<!-- /TOC -->
+
 ## Introduction
 
 ### Goal of this package
@@ -55,10 +71,115 @@ All the following examples and usages use the `df` notation.
 
 ### Handling incoming request
 
+In this section we'll use the [gin](https://github.com/gin-gonic/gin) router as
+it has some nice helper functions that will keep the code concise. For an
+example using the standard `http` router, see 
+[this example](https://github.com/leboncoin/dialogflow-go-webhook/blob/master/examples/http).
+
 When DialogFlow sends a request to your webhook, you can unmarshal the incoming
-data to a `df.Request`. 
+data to a `df.Request`. This, however, will not unmarshal the contexts and the
+parameters because those are completely dependent on your data models.
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	df "github.com/leboncoin/dialogflow-go-webhook"
+)
+
+type params struct {
+	City   string `json:"city"`
+	Gender string `json:"gender"`
+	Age    int    `json:"age"`
+}
+
+func HandleWebhook(c *gin.Context) {
+	var err error
+	var dfr *df.Request
+
+	if err = c.BindJSON(&dfr); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+}
+
+func main() {
+	r := gin.Default()
+	r.POST("/webhook")
+	if err := r.Run("127.0.0.1:8001"); err != nil {
+		panic(err)
+	}
+}
+```
+
+### Retrieving params and contexts
+
+```go
+type params struct {
+	City   string `json:"city"`
+	Gender string `json:"gender"`
+	Age    int    `json:"age"`
+}
+
+func HandleWebhook(c *gin.Context) {
+	var err error
+	var dfr *df.Request
+    var p params
+
+	if err = c.BindJSON(&dfr); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+    }
+    
+    if err = dfr.GetParams(&p); err != nil {
+        c.AbortWithStatus(http.StatusBadRequest)
+        return
+    }
+}
+```
+
+In this example we're getting the DialogFlow request and unmarshalling the
+params to a defined struct. This is why `json.RawMessage` is used in both the 
+`Request.QueryResult.Parameters` and in the `Request.QueryResult.Contexts`.
+
+This also allows you to filter and route according to the `action` and `intent`
+DialogFlow detected, which means that depending on which action you detected,
+you can unmarshal the parameters and contexts to a completely different data
+structure.
+
+The same thing can be done for contexts :
+
+```go
+type params struct {
+	City   string `json:"city"`
+	Gender string `json:"gender"`
+	Age    int    `json:"age"`
+}
+
+func HandleWebhook(c *gin.Context) {
+	var err error
+	var dfr *df.Request
+    var p params
+
+	if err = c.BindJSON(&dfr); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+    }
+    
+    if err = dfr.GetContext("my-amazing-context", &p); err != nil {
+        c.AbortWithStatus(http.StatusBadRequest)
+        return
+    }
+}
+``` 
 
 ### Responding with a fulfillment
+
+DialogFlow expects you to respond with what is called a [fulfillment](https://dialogflow.com/docs/reference/api-v2/rest/v2beta1/WebhookResponse).
+
 
 ## Examples
 

@@ -16,7 +16,7 @@ func TestLocation_UnmarshalJSON(t *testing.T) {
 		want    *Location
 		wantErr bool
 	}{
-		{"should unmarshal to location", []byte(`{"subadmin-area": "Paris"}`), &Location{Department: "Paris"}, false},
+		{"should unmarshal to location", []byte(`{"subadmin-area": "Paris"}`), &Location{SubAdminArea: "Paris"}, false},
 		{"should unmarshal to simple string", []byte(`"Paris"`), &Location{Simple: "Paris"}, false},
 	}
 	for _, tt := range tests {

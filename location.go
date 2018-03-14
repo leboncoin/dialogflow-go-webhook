@@ -4,12 +4,12 @@ import "encoding/json"
 
 // Location is a location object sent back by DialogFlow
 type Location struct {
-	Simple             string
-	Region             string          `json:"admin-area,omitempty"`
-	RegionOriginal     string          `json:"admin-area.original,omitempty"`
-	RegionObject       json.RawMessage `json:"admin-area.object,omitempty"`
-	DepartmentOriginal string          `json:"subadmin-area.original,omitempty"`
-	Department         string          `json:"subadmin-area,omitempty"`
+	Simple               string
+	AdminArea            string          `json:"admin-area,omitempty"`
+	AdminAreaOriginal    string          `json:"admin-area.original,omitempty"`
+	AdminAreaObject      json.RawMessage `json:"admin-area.object,omitempty"`
+	SubAdminArea         string          `json:"subadmin-area,omitempty"`
+	SubAdminAreaOriginal string          `json:"subadmin-area.original,omitempty"`
 }
 
 // UnmarshalJSON implements the Unmarshaler interface for JSON parsing
