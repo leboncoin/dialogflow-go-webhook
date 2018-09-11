@@ -9,12 +9,20 @@ import (
 // Fulfillment is the response sent back to dialogflow in case of a successful
 // webhook call
 type Fulfillment struct {
-	FulfillmentText     string      `json:"fulfillmentText,omitempty"`
-	FulfillmentMessages Messages    `json:"fulfillmentMessages,omitempty"`
-	Source              string      `json:"source,omitempty"`
-	Payload             interface{} `json:"payload,omitempty"`
-	OutputContexts      Contexts    `json:"outputContexts,omitempty"`
-	FollowupEventInput  interface{} `json:"followupEventInput,omitempty"`
+	FulfillmentText     string             `json:"fulfillmentText,omitempty"`
+	FulfillmentMessages Messages           `json:"fulfillmentMessages,omitempty"`
+	Source              string             `json:"source,omitempty"`
+	Payload             interface{}        `json:"payload,omitempty"`
+	OutputContexts      Contexts           `json:"outputContexts,omitempty"`
+	FollowupEventInput  FollowupEventInput `json:"followupEventInput,omitempty"`
+}
+
+// FollowupEventInput Optional. Makes the platform immediately invoke another sessions.detectIntent call internally with the specified event as input.
+// https://dialogflow.com/docs/reference/api-v2/rest/v2beta1/projects.agent.sessions/detectIntent#EventInput
+type FollowupEventInput struct {
+	Name         string      `json:"name"`
+	LanguageCode string      `json:"languageCode,omitempty"`
+	Parameters   interface{} `json:"parameters,omitempty"`
 }
 
 // Messages is a simple slice of Message
