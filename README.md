@@ -7,6 +7,7 @@
 [![codecov](https://codecov.io/gh/leboncoin/dialogflow-go-webhook/branch/master/graph/badge.svg)](https://codecov.io/gh/leboncoin/dialogflow-go-webhook)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/leboncoin/dialogflow-go-webhook/blob/master/LICENSE)
 [![Godoc](https://godoc.org/github.com/leboncoin/dialogflow-go-webhook?status.svg)](https://godoc.org/github.com/leboncoin/dialogflow-go-webhook)
+ [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 Simple library to create compatible DialogFlow v2 webhooks using Go.
 
